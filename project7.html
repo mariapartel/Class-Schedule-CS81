@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  	<title>Schedule for classes</title>
+    <style>
+      /* Defines a cleaner look for tables */
+      table  { border-collapse: collapse; }
+      td, th { border: 1px solid black; padding: 3px 8px; }
+      th     { text-align: left; }
+    </style>
+  </head>
+  <body>
+  	<h1>Schedule</h1>
+  	<div id="schedule"></div>
+  <script>
+	  const CLASS_SCHEDULE = [
+		{
+			week: 1,
+			begins: "09/20",
+			topics: ["Introduction", "Chapter 1: Values, Types Operators", "Assignment 1 due 11:59 on 09/26"]	
+		},
+		{
+			week: 2,
+			begins: "09/27",
+			topics: ["Chapter 2: Programming Structure", "Assignment 2 due 11:59 10/03"]
+		},
+		{
+			week: 3,
+			begins: "10/04",
+			topics: ["Chapter 3: Functions", "Assignment 3 due 11:59 10/10"]
+		},
+		{
+			week: 4,
+			begins: "10/11",
+			topics: ["Chapter 4: Data Structures // Objects and Arrays", "Assignment 4 due 11:59 10/17"]
+		},
+		{
+			week: 5,
+			begins: "10/18",
+			topics: ["Chapter 5: Higher-Order Functions", "Assignment 5 due 11:59 10/24", "Test 1: Tuesday 12 am (10/19) - Friday 12:00 pm (10/22)"]
+		},
+		{
+			week: 6,
+			begins: "10/25",
+			topics: ["Chapter 6: The Secret Life of Objects", "Chapter 8: Bugs and Errors", "Assignment 6 due 11:59 10/31"]
+		},
+		{
+			week: 7,
+			begins: "11/01",
+			topics: ["Chapter 13: JavaScript and the Browser", "Chapter 14: The Document Object Model", "Assignment 7 due 11:59 11/07"]
+		},
+		{
+			week: 8,
+			begins: "11/08",
+			topics: ["Chapter 11: Asynchronous Programming", "Chapter 15: Handling Events", "Assignment 8 due 11:59 11/14"]
+		},
+		{
+			week: 9,
+			begins: "11/15",
+			topics: ["Chapter 18: HTTP and Forms", "Assignment 9 due 11:59 11/21"]
+		},
+		{
+			week: 10,
+			begins: "11/22",
+			topics: ["Chapter 20: Node.js // Express.js", "Assignment 10 due 11:59 11/28"]
+		},
+		{
+			week: 11,
+			begins: "11/29",
+			topics: ["JQuery // AJAX (Lecture Notes)", "Bonus Assignment due until end of semester"]
+		},
+		{
+			week: 12,
+			begins: "12/06",
+			topics: ["No Assignment", "Test 2: Monday 12am (12/06) - Friday 11:59pm (12/10)", "Please take this week to finish up your semester project as well.", "Semester Project due Saturday 11:59 PM (12/11)"]
+		},
+		{
+			week: "",
+			begins: "12/12",
+			topics: ["Course Ends"]
+		},
+	  ];
+	  console.log('ar')
+	  function buildTable(arr) {
+		let out = document.createElement("table");
+		let fields = Object.keys(arr[0]);
+		let headRow = document.createElement("tr");
+		fields.forEach(function(field) {
+			let headCell = document.createElement("th");
+			var head = field == "topics" ? "Chapters to Read / Topics [Eloquent Javascript 2nd Edition]" : field.charAt(0).toUpperCase() + field.slice(1); 
+			headCell.appendChild(document.createTextNode(head));
+			headRow.appendChild(headCell);
+		});
+		out.appendChild(headRow);
+	
+		arr.forEach(function(obj) {
+			let row = document.createElement("tr");
+			fields.forEach(function(field) {
+				let item = document.createElement("td");
+				let txt = obj[field];
+				let font_style = "'Verdana', sans-serif";
+				if (field == "topics") {
+					for (var i = 0; i < txt.length; i++) {
+						let str = txt[i];
+						if (str.indexOf('Assignment') > -1 || str.indexOf("Course Ends") > -1) {
+							let container = document.createElement("span");
+							let text = document.createTextNode(txt[i]);
+							container.appendChild(text);
+							container.style.color = "green";
+							container.style.fontFamily = font_style;
+							item.appendChild(container);
+						} else if (str.indexOf('Test') == 0 || str.indexOf('Semester Project') == 0) {
+							let len_sep = str.indexOf('Test') == 0 ? 6 : 16;
+							let container = document.createElement("span");
+							let text = document.createTextNode(txt[i].slice(0, len_sep));
+							container.appendChild(text);
+							container.style.color = "red";
+							container.style.fontWeight = "bold";
+							let container2 = document.createElement("span");
+							let text2 = document.createTextNode(txt[i].slice(len_sep));
+							container2.appendChild(text2);
+							container2.style.color = "red";
+							container.style.fontFamily = font_style;
+							container2.style.fontFamily = font_style;
+							item.appendChild(container);
+							item.appendChild(container2);
+						} else {
+							let container = document.createElement("span");
+							let text = document.createTextNode(txt[i]);
+							container.appendChild(text);
+							container.style.fontFamily = font_style;
+							item.appendChild(container);
+						}
+						if (i == txt.length -1) {
+							continue;
+						}
+						item.appendChild(document.createElement("br"));
+						item.appendChild(document.createElement("br"));
+					}
+				} else {
+					let container = document.createElement("span");
+					let text = document.createTextNode(txt);
+					container.style.fontFamily = font_style;
+					container.appendChild(text);
+					item.appendChild(container);
+				}
+				row.appendChild(item);
+			})
+			out.appendChild(row);
+		});
+		return out;
+	  }
+
+	  document.querySelector("#schedule").appendChild(buildTable(CLASS_SCHEDULE));
+	</script>
+  </body>
+</html>
